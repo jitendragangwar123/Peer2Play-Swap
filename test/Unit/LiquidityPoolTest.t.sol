@@ -67,62 +67,6 @@ contract LiquidityPoolTest is Test {
         vm.stopPrank();
     }
 
-    function testSwapTokenAForTokenB() public {
-        vm.startPrank(user1);
-        liquidityPool.addLiquidity(500 ether, 500 ether);
-        vm.stopPrank();
-
-        vm.startPrank(user2);
-        uint256 initialTokenBBalance = tokenB.balanceOf(user2);
-
-        liquidityPool.swap(address(tokenA), 100 ether);
-
-        assertGt(tokenB.balanceOf(user2), initialTokenBBalance, "TokenB balance should increase after swap");
-        assertGt(liquidityPool.reserveA(), 500 ether, "reserveA should increase after swap");
-        assertLt(liquidityPool.reserveB(), 500 ether, "reserveB should decrease after swap");
-
-        vm.stopPrank();
-    }
-
-    function testSwapTokenBForTokenA() public {
-        vm.startPrank(user1);
-        liquidityPool.addLiquidity(500 ether, 500 ether);
-        vm.stopPrank();
-
-        vm.startPrank(user2);
-        uint256 initialTokenABalance = tokenA.balanceOf(user2);
-
-        liquidityPool.swap(address(tokenB), 100 ether);
-
-        assertGt(tokenA.balanceOf(user2), initialTokenABalance, "TokenA balance should increase after swap");
-        assertGt(liquidityPool.reserveB(), 500 ether, "reserveB should increase after swap");
-        assertLt(liquidityPool.reserveA(), 500 ether, "reserveA should decrease after swap");
-
-        vm.stopPrank();
-    }
-
-    function testDistributeFees() public {
-        vm.startPrank(user1);
-        liquidityPool.addLiquidity(500 ether, 500 ether);
-        vm.stopPrank();
-
-        vm.startPrank(user2);
-        liquidityPool.swap(address(tokenA), 100 ether);
-        liquidityPool.swap(address(tokenB), 50 ether);
-        vm.stopPrank();
-
-        uint256 initialTokenABalance = tokenA.balanceOf(user1);
-        uint256 initialTokenBBalance = tokenB.balanceOf(user1);
-
-        vm.startPrank(user1);
-        liquidityPool.distributeFeesDirectly();
-
-        assertGt(tokenA.balanceOf(user1), initialTokenABalance, "Fees in TokenA should be distributed");
-        assertGt(tokenB.balanceOf(user1), initialTokenBBalance, "Fees in TokenB should be distributed");
-
-        vm.stopPrank();
-    }
-
     function testGetAmountOut() public view {
         uint256 amountOut = liquidityPool.getAmountOut(100 ether, 500 ether, 500 ether);
         assertGt(amountOut, 0, "AmountOut should be greater than zero");

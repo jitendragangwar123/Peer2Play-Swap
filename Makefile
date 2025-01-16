@@ -24,11 +24,13 @@ install :; forge install cyfrin/foundry-devops@0.2.2 --no-commit && forge instal
 # Update Dependencies
 update:; forge update
 
-build:; forge build
+build:; forge build --via-ir
 
-test :; forge test -vvvv
+test :; forge test --via-ir -vvvv
 
-snapshot :; forge snapshot
+snapshot :; forge snapshot --via-ir
+
+coverage :; forge coverage --via-ir
 
 format :; forge fmt
 
@@ -41,7 +43,7 @@ ifeq ($(findstring --network sepolia,$(ARGS)),--network sepolia)
 endif
 
 deploy:
-	@forge script script/DeployLiquidityPool.s.sol:DeployLiquidityPool $(NETWORK_ARGS)
+	@forge script script/DeployLiquidityPool.s.sol:DeployLiquidityPool --via-ir $(NETWORK_ARGS)
 
 
 
