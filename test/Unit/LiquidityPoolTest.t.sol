@@ -123,7 +123,7 @@ contract LiquidityPoolTest is Test {
         vm.stopPrank();
     }
 
-    function testGetAmountOut() public {
+    function testGetAmountOut() public view {
         uint256 amountOut = liquidityPool.getAmountOut(100 ether, 500 ether, 500 ether);
         assertGt(amountOut, 0, "AmountOut should be greater than zero");
     }
