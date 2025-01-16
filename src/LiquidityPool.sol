@@ -117,38 +117,37 @@ contract LiquidityPool is Ownable, ERC20, ReentrancyMock {
      */
     function swap(address tokenIn, uint256 amountIn) external nonReentrant {
         require(amountIn > 0, "Amount must be greater than zero");
+
         bool isTokenAIn = tokenIn == address(tokenA);
         require(isTokenAIn || tokenIn == address(tokenB), "Invalid token address");
 
         IERC20 inputToken = isTokenAIn ? tokenA : tokenB;
         IERC20 outputToken = isTokenAIn ? tokenB : tokenA;
+
         uint256 inputReserve = isTokenAIn ? reserveA : reserveB;
         uint256 outputReserve = isTokenAIn ? reserveB : reserveA;
 
-        uint256 userBalance = inputToken.balanceOf(msg.sender);
-        require(userBalance >= amountIn, "Insufficient token balance");
+        require(inputReserve > 0 && outputReserve > 0, "Reserves must be greater than zero");
         bool transferSuccess = inputToken.transferFrom(msg.sender, address(this), amountIn);
-        require(transferSuccess, "Transfer failed");
+        require(transferSuccess, "Token transfer failed");
 
         uint256 amountOut = getAmountOut(amountIn, inputReserve, outputReserve);
         require(amountOut > 0, "Insufficient output amount");
 
-        uint256 minAmountOut = (amountIn * 95) / 100;
-        require(amountOut >= minAmountOut, "Slippage exceeded");
         uint256 feeA = (amountIn * 4) / 100;
         uint256 feeB = (amountOut * 4) / 100;
         uint256 contractFeeA = (amountIn * 1) / 100;
         uint256 contractFeeB = (amountOut * 1) / 100;
 
+        require(feeA < amountIn, "Fee on input exceeds amountIn");
+        require(feeB < amountOut, "Fee on output exceeds amountOut");
         accumulatedFeesA += feeA;
         accumulatedFeesB += feeB;
         accumulatedContractFeesA += contractFeeA;
         accumulatedContractFeesB += contractFeeB;
 
-        uint256 contractReserve = outputToken.balanceOf(address(this));
-        require(contractReserve >= amountOut - feeB - contractFeeB, "Insufficient liquidity");
         bool outputTransferSuccess = outputToken.transfer(msg.sender, amountOut - feeB - contractFeeB);
-        require(outputTransferSuccess, "Output transfer failed");
+        require(outputTransferSuccess, "Output token transfer failed");
 
         if (isTokenAIn) {
             reserveA += amountIn - feeA - contractFeeA;
@@ -157,15 +156,14 @@ contract LiquidityPool is Ownable, ERC20, ReentrancyMock {
             reserveB += amountIn - feeA - contractFeeA;
             reserveA -= amountOut - feeB - contractFeeB;
         }
-
         emit Swap(msg.sender, tokenIn, amountIn, amountOut - feeB - contractFeeB);
         distributeFeesDirectly();
     }
+
     /**
      * @notice Distributes accumulated fees to liquidity providers.
      * @dev Liquidity providers receive a portion of the fees proportional to their liquidity share.
      */
-
     function distributeFeesDirectly() internal {
         require(accumulatedFeesA > 0 || accumulatedFeesB > 0, "No fees to distribute");
 
