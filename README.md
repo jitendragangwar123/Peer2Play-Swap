@@ -1,6 +1,9 @@
 # Peer2Play Swap 🎰
 **Peer2Play Swap** is a decentralized liquidity pool contract that facilitates the swapping and liquidity provision of two ERC20 tokens. It implements a **constant product AMM model** with a **5% fee split** (4% for liquidity providers and 1% for the contract), ensuring a fair and efficient environment for token swaps and liquidity mining.
 
+<img width="1432" alt="home-page" src="https://github.com/user-attachments/assets/d31c9446-99f7-462e-89c9-9a25e4d46f26" />
+<img width="1411" alt="token-swap-page" src="https://github.com/user-attachments/assets/65436a86-4bf8-437a-8b3c-392d6e91f3f7" />
+
 ---
 ### 🚀 Features
 - **Decentralized Liquidity Pool**: A smart contract-based pool for token swaps between two ERC20 tokens.
