@@ -1,66 +1,108 @@
-## Foundry
+# Peer2Play Swap 🎰
+**Peer2Play Swap** is a decentralized liquidity pool contract that facilitates the swapping and liquidity provision of two ERC20 tokens. It implements a **constant product AMM model** with a **5% fee split** (4% for liquidity providers and 1% for the contract), ensuring a fair and efficient environment for token swaps and liquidity mining.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+---
+### 🚀 Features
+- **Decentralized Liquidity Pool**: A smart contract-based pool for token swaps between two ERC20 tokens.
+- **Constant Product AMM**: Uses the constant product formula for swap calculations (x * y = k).
+- **Liquidity Provider Incentives**: 4% of swap fees distributed to liquidity providers.
+- **Contract Fee**: 1% of swap fees go to the contract.
+- **Fair Fee Distribution**: Fees are distributed proportionally based on liquidity shares.
+- **Flexible Liquidity Addition and Removal**: Liquidity can be added or removed in proportion to shares in the pool.
+- **Provably Fair Swaps**: Token swaps are based on a constant product model for fair pricing.
+- **Event Logging**: Tracks key events such as liquidity addition/removal, swaps, and fee distributions.
+---
 
-Foundry consists of:
+### 🛠 Requirements
+Before you start, ensure that you have the following installed:
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Foundry](https://getfoundry.sh/)
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
+### ⚡ Quickstart
+Clone the repository and set up your environment:
+```
+$ git clone https://github.com/jitendragangwar123/Peer2Play-Swap
+$ cd Peer2Play-Swap
+$ make install
 $ forge build
 ```
 
-### Test
+### 🌍 Deployment to a Testnet or Mainnet
 
-```shell
+#### 1. Setup Environment Variables
+
+You'll need to set your `SEPOLIA_RPC_URL` and `PRIVATE_KEY` as environment variables. You can add them to a `.env` file in your project directory.
+
+Optionally, you can also add your `ETHERSCAN_API_KEY` if you want to verify your contract on [Etherscan](https://etherscan.io/).
+
+#### 2. Get Testnet ETH
+
+Head over to [faucets.chain.link](https://faucets.chain.link/) to get some testnet ETH. The ETH should show up in your MetaMask wallet shortly.
+
+#### 3. Deploy to Sepolia Testnet
+
+To deploy your contract to the **Sepolia** testnet, run:
+
+```
+$ make deploy ARGS="--network sepolia"
+```
+
+### 🧪 Testing
+
+You can run tests in various environments:
+
+1. **Unit Tests**
+2. **Integration Tests**
+3. **Forked Network Tests**
+4. **Staging Tests**
+
+To run all tests, use:
+
+```
 $ forge test
 ```
+or
 
-### Format
-
-```shell
-$ forge fmt
+```
+$ forge test --fork-url $SEPOLIA_RPC_URL
 ```
 
-### Gas Snapshots
+### Test Coverage
 
-```shell
+```
+$ forge coverage
+```
+
+### ⛽ Estimate Gas
+
+You can estimate how much gas transactions will cost by running:
+
+```
 $ forge snapshot
 ```
 
-### Anvil
+And you'll see an output file called `.gas-snapshot`
 
-```shell
-$ anvil
+### 📝 Formatting
+
+To run code formatting, use the following command:
+
+```
+$ forge fmt
 ```
 
-### Deploy
+## 🌐 Front-End
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+### ⚡ Quickstart
 ```
+$ cd front-end
 
-### Cast
+# Create .env file in the front-end
+NEXT_PUBLIC_PROJECT_ID=paste_your_walletconnect_project_id_here
 
-```shell
-$ cast <subcommand>
-```
+# Install the dependencies
+$ npm i
 
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+# Start the client
+$ npm run dev
 ```
